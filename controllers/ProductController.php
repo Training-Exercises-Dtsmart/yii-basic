@@ -5,29 +5,57 @@ namespace app\controllers;
 use app\models\form\ProductForm;
 use app\models\Product;
 use Yii;
-use yii\rest\Controller;
+use yii\db\Exception;
 
 class ProductController extends Controller
 {
+
+    public function actionUpdate($id)
+    {
+        $product = Product::find()->where(["id" => $id])->one();
+        if (!$product) {
+            return $this->json(false, [], "Product not found", 404);
+        }
+        $product->load(Yii::$app->request->post());
+        if (!$product->validate() || !$product->save()) {
+            return $this->json(false, [], "Can't update product", 400);
+        }
+        return $this->json(true, $product, "Update successfully");
+    }
+
     public function actionIndex()
     {
-        $products = Product::find()->active()->all();
-        return $products;
+        $product = Product::find()->all();
+
+        return $product;
     }
 
+    /**
+     * @return array|ProductForm
+     * @throws Exception
+     */
     public function actionCreate()
     {
-//        $price = \Yii::$app->request->post("price");
-
-        $productForm = new ProductForm();
-        $productForm->load(Yii::$app->request->post());
-        if (!$productForm->validate()) {
-            return $productForm->getErrors();
+        $product = new ProductForm();
+        $product->load(Yii::$app->request->post());
+        if (!$product->validate() || !$product->save()) {
+            return $this->json(false, [
+                "errors" => $product->getErrors()
+            ], "Can't update product", 400);
         }
-        $productForm->save();
-        return $productForm;
-
-//        $productForm->price = $price;
-
+        return $this->json(true, $product, "Success");
     }
+
+    public function actionDelete($id)
+    {
+        $product = Product::find()->select(["id"])->where(["id" => $id])->one();
+        if (!$product) {
+            return $this->json(false, [], "Product not found");
+        }
+        if (!$product->delete()) {
+            return $this->json(false, [], "Can't delete product", 400);
+        }
+        return $this->json(true, [], "Success");
+    }
+
 }

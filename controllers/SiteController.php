@@ -61,7 +61,7 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        Product::find()->active();
+//        Product::find()->active();
         return $this->render('index');
     }
 
