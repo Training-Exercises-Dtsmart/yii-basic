@@ -6,17 +6,17 @@ namespace app\models\base;
 
 use Yii;
 use yii\helpers\ArrayHelper;
-use \app\models\OrderQuery;
+use \app\models\CategoryQuery;
 
 /**
- * This is the base-model class for table "orders".
+ * This is the base-model class for table "categories".
  *
  * @property integer $id
- * @property string $total
+ * @property string $name
  *
- * @property \app\models\OrderItem[] $orderItems
+ * @property \app\models\Product[] $products
  */
-abstract class Order extends \yii\db\ActiveRecord
+abstract class Category extends \yii\db\ActiveRecord
 {
 
     /**
@@ -24,7 +24,7 @@ abstract class Order extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'orders';
+        return 'categories';
     }
 
     /**
@@ -34,7 +34,7 @@ abstract class Order extends \yii\db\ActiveRecord
     {
         $parentRules = parent::rules();
         return ArrayHelper::merge($parentRules, [
-            [['total'], 'string', 'max' => 255]
+            [['name'], 'string', 'max' => 255]
         ]);
     }
 
@@ -45,24 +45,24 @@ abstract class Order extends \yii\db\ActiveRecord
     {
         return ArrayHelper::merge(parent::attributeLabels(), [
             'id' => 'ID',
-            'total' => 'Total',
+            'name' => 'Name',
         ]);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getOrderItems()
+    public function getProducts()
     {
-        return $this->hasMany(\app\models\OrderItem::class, ['order_id' => 'id']);
+        return $this->hasMany(\app\models\Product::class, ['category_id' => 'id']);
     }
 
     /**
      * @inheritdoc
-     * @return OrderQuery the active query used by this AR class.
+     * @return CategoryQuery the active query used by this AR class.
      */
     public static function find()
     {
-        return new OrderQuery(static::class);
+        return new CategoryQuery(static::class);
     }
 }

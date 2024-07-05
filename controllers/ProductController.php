@@ -5,7 +5,9 @@ namespace app\controllers;
 use app\models\form\ProductForm;
 use app\models\Product;
 use Yii;
+use yii\data\ActiveDataProvider;
 use yii\db\Exception;
+use yii\rest\Serializer;
 
 class ProductController extends Controller
 {
@@ -23,11 +25,32 @@ class ProductController extends Controller
         return $this->json(true, $product, "Update successfully");
     }
 
+    public function actionListSearch()
+    {
+//        // join raw
+//        $product = Product::find()
+//            ->andFilterWhere(["LIKE", "categories.name", Yii::$app->request->getQueryParam("category_name")])
+//            ->leftJoin("categories", "products.category_id=categories.id")
+//            ->all();
+//        $product = Product::find()
+//            ->andFilterWhere(["LIKE", "categories.name", Yii::$app->request->getQueryParam("category_name")])
+//            ->joinWith("category")
+//            ->all()
+//        return $this->json($product);
+    }
+
     public function actionIndex()
     {
-        $product = Product::find()->all();
-
-        return $product;
+        $query = Product::find();
+        $dataProvider = new ActiveDataProvider([
+            "query" => $query,
+            "sort" => [
+                'defaultOrder' => [
+                    'id' => SORT_DESC,
+                ]
+            ]
+        ]);
+        $serializer = new Serializer(["collectionEnvelope" => "items"]);
     }
 
     /**

@@ -7,7 +7,7 @@ namespace app\models\base;
 use Yii;
 use yii\helpers\ArrayHelper;
 use yii\behaviors\TimestampBehavior;
-use \app\models\query\OrderItemQuery;
+use \app\models\OrderItemQuery;
 
 /**
  * This is the base-model class for table "order_items".
@@ -67,12 +67,12 @@ abstract class OrderItem extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return ArrayHelper::merge(parent::attributeLabels(), [
-            'id' => Yii::t('models', 'ID'),
-            'product_id' => Yii::t('models', 'Product ID'),
-            'order_id' => Yii::t('models', 'Order ID'),
-            'price' => Yii::t('models', 'Price'),
-            'created_at' => Yii::t('models', 'Created At'),
-            'updated_at' => Yii::t('models', 'Updated At'),
+            'id' => 'ID',
+            'product_id' => 'Product ID',
+            'order_id' => 'Order ID',
+            'price' => 'Price',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
         ]);
     }
 

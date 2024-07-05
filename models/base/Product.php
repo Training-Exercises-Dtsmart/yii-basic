@@ -6,7 +6,7 @@ namespace app\models\base;
 
 use Yii;
 use yii\helpers\ArrayHelper;
-use \app\models\query\ProductQuery;
+use \app\models\ProductQuery;
 
 /**
  * This is the base-model class for table "products".
@@ -15,7 +15,9 @@ use \app\models\query\ProductQuery;
  * @property string $name
  * @property double $price
  * @property integer $status
+ * @property integer $category_id
  *
+ * @property \app\models\Category $category
  * @property \app\models\OrderItem[] $orderItems
  */
 abstract class Product extends \yii\db\ActiveRecord
@@ -37,23 +39,33 @@ abstract class Product extends \yii\db\ActiveRecord
         $parentRules = parent::rules();
         return ArrayHelper::merge($parentRules, [
             [['price'], 'number'],
-            [['status'], 'integer'],
-            [['name'], 'string', 'max' => 255]
+            [['status', 'category_id'], 'integer'],
+            [['name'], 'string', 'max' => 255],
+            [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => \app\models\Category::class, 'targetAttribute' => ['category_id' => 'id']]
         ]);
     }
 
     /**
      * @inheritdoc
      */
-//    public function attributeLabels()
-//    {
-//        return ArrayHelper::merge(parent::attributeLabels(), [
-//            'id' => Yii::t('models', 'ID'),
-//            'name' => Yii::t('models', 'Name'),
-//            'price' => Yii::t('models', 'Price'),
-//            'status' => Yii::t('models', 'Status'),
-//        ]);
-//    }
+    public function attributeLabels()
+    {
+        return ArrayHelper::merge(parent::attributeLabels(), [
+            'id' => 'ID',
+            'name' => 'Name',
+            'price' => 'Price',
+            'status' => 'Status',
+            'category_id' => 'Category ID',
+        ]);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCategory()
+    {
+        return $this->hasOne(\app\models\Category::class, ['id' => 'category_id']);
+    }
 
     /**
      * @return \yii\db\ActiveQuery

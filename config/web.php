@@ -1,5 +1,7 @@
 <?php
 
+use app\modules\Module;
+
 $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
 
@@ -53,6 +55,9 @@ $config = [
         ],
 
     ],
+    'modules' => [
+        'api' => Module::class
+    ],
     'params' => $params,
 ];
 
@@ -65,8 +70,8 @@ if (YII_ENV_DEV) {
         //'allowedIPs' => ['127.0.0.1', '::1'],
     ];
 
-    $config['bootstrap'][] = 'tool';
-    $config['modules']['tool'] = [
+    $config['bootstrap'][] = 'gii';
+    $config['modules']['gii'] = [
         'class' => 'yii\gii\Module',
         // uncomment the following to add your IP if you are not connecting from localhost.
         //'allowedIPs' => ['127.0.0.1', '::1'],

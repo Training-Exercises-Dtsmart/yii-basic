@@ -52,7 +52,7 @@
         "name": "generateQuery"
     },
     "queryns": {
-        "value": "app\\models\\query",
+        "value": "app\\models",
         "name": "queryNs"
     },
     "queryclass": {
@@ -64,7 +64,7 @@
         "name": "queryBaseClass"
     },
     "enablei18n": {
-        "value": true,
+        "value": false,
         "name": "enableI18N"
     },
     "singularentities": {
